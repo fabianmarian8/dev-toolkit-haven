@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Sidebar } from "@/components/Sidebar";
+import { MobileSidebar } from "@/components/MobileSidebar";
 import { JsonFormatter } from "@/components/tools/JsonFormatter";
 import { Base64Tool } from "@/components/tools/Base64Tool";
 import { ImageCompressor } from "@/components/tools/ImageCompressor";
@@ -10,44 +12,111 @@ import { HashGenerator } from "@/components/tools/HashGenerator";
 import { QRCodeGenerator } from "@/components/tools/QRCodeGenerator";
 import { TextDiff } from "@/components/tools/TextDiff";
 import { URLTool } from "@/components/tools/URLTool";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
+
+const toolsMap: Record<string, { component: React.ReactNode; title: string; description: string }> = {
+  "/json": { 
+    component: <JsonFormatter />, 
+    title: "JSON Formatter", 
+    description: "Format, validate, and minify JSON data" 
+  },
+  "/base64": { 
+    component: <Base64Tool />, 
+    title: "Base64 Encoder/Decoder", 
+    description: "Encode and decode Base64 strings" 
+  },
+  "/image": { 
+    component: <ImageCompressor />, 
+    title: "Image Compressor", 
+    description: "Compress and optimize images" 
+  },
+  "/color": { 
+    component: <ColorPickerTool />, 
+    title: "Color Picker", 
+    description: "Pick colors and convert between formats" 
+  },
+  "/regex": { 
+    component: <RegexTester />, 
+    title: "Regex Tester", 
+    description: "Test and debug regular expressions" 
+  },
+  "/markdown": { 
+    component: <MarkdownPreview />, 
+    title: "Markdown Preview", 
+    description: "Preview markdown in real-time" 
+  },
+  "/hash": { 
+    component: <HashGenerator />, 
+    title: "Hash Generator", 
+    description: "Generate MD5, SHA-256, and SHA-512 hashes" 
+  },
+  "/qr": { 
+    component: <QRCodeGenerator />, 
+    title: "QR Code Generator", 
+    description: "Create QR codes from text" 
+  },
+  "/diff": { 
+    component: <TextDiff />, 
+    title: "Text Diff", 
+    description: "Compare text differences" 
+  },
+  "/url": { 
+    component: <URLTool />, 
+    title: "URL Encoder/Decoder", 
+    description: "Encode and decode URLs" 
+  },
+};
 
 const Index = () => {
-  const [activeTool, setActiveTool] = useState("json");
-
-  const renderTool = () => {
-    switch (activeTool) {
-      case "json":
-        return <JsonFormatter />;
-      case "base64":
-        return <Base64Tool />;
-      case "image":
-        return <ImageCompressor />;
-      case "color":
-        return <ColorPickerTool />;
-      case "regex":
-        return <RegexTester />;
-      case "markdown":
-        return <MarkdownPreview />;
-      case "hash":
-        return <HashGenerator />;
-      case "qr":
-        return <QRCodeGenerator />;
-      case "diff":
-        return <TextDiff />;
-      case "url":
-        return <URLTool />;
-      default:
-        return <JsonFormatter />;
-    }
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [lastTool, setLastTool] = useLocalStorage("lastTool", "json");
+  
+  const getToolFromPath = (path: string) => {
+    if (path === "/") return "json";
+    return path.substring(1);
   };
 
+  const [activeTool, setActiveTool] = useState(() => {
+    const toolFromPath = getToolFromPath(location.pathname);
+    return toolFromPath;
+  });
+
+  useEffect(() => {
+    const toolFromPath = getToolFromPath(location.pathname);
+    if (toolFromPath !== activeTool) {
+      setActiveTool(toolFromPath);
+    }
+  }, [location.pathname]);
+
+  useEffect(() => {
+    setLastTool(activeTool);
+  }, [activeTool, setLastTool]);
+
+  const handleToolChange = (tool: string) => {
+    setActiveTool(tool);
+    navigate(`/${tool}`);
+  };
+
+  const currentTool = toolsMap[location.pathname] || toolsMap["/json"];
+
   return (
-    <div className="flex h-screen overflow-hidden">
-      <Sidebar activeTool={activeTool} onToolChange={setActiveTool} />
+    <div className="flex h-screen overflow-hidden w-full">
+      <Sidebar activeTool={activeTool} onToolChange={handleToolChange} />
       <main className="flex-1 overflow-y-auto">
+        <div className="md:hidden p-4 border-b flex items-center gap-3">
+          <MobileSidebar activeTool={activeTool} onToolChange={handleToolChange} />
+          <h1 className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+            DevTools Hub
+          </h1>
+        </div>
         <div className="container max-w-4xl py-8 px-4">
+          <div className="mb-6">
+            <h2 className="text-3xl font-bold mb-2">{currentTool.title}</h2>
+            <p className="text-muted-foreground">{currentTool.description}</p>
+          </div>
           <div className="bg-gradient-card rounded-xl shadow-glow p-6 border">
-            {renderTool()}
+            {currentTool.component}
           </div>
         </div>
       </main>

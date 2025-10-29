@@ -1,23 +1,36 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 export const RegexTester = () => {
-  const [pattern, setPattern] = useState("");
-  const [flags, setFlags] = useState("g");
-  const [testString, setTestString] = useState("");
+  const [pattern, setPattern] = useLocalStorage("regexPattern", "");
+  const [flags, setFlags] = useLocalStorage("regexFlags", "g");
+  const [testString, setTestString] = useLocalStorage("regexTestString", "");
   const [matches, setMatches] = useState<string[]>([]);
 
-  const testRegex = () => {
+  useEffect(() => {
+    if (!pattern || !testString) return;
+    
     try {
       const regex = new RegExp(pattern, flags);
       const found = testString.match(regex);
       setMatches(found || []);
-      toast.success(`Found ${found?.length || 0} matches!`);
     } catch (error) {
-      toast.error("Invalid regex: " + (error as Error).message);
       setMatches([]);
+    }
+  }, [pattern, flags, testString]);
+
+  const highlightMatches = () => {
+    if (!pattern || !testString || matches.length === 0) return testString;
+    
+    try {
+      const regex = new RegExp(pattern, flags);
+      return testString.replace(regex, (match) => `<mark class="bg-primary/20 rounded px-1">${match}</mark>`);
+    } catch {
+      return testString;
     }
   };
 
@@ -28,11 +41,8 @@ export const RegexTester = () => {
           <label className="block text-sm font-medium mb-2">Pattern</label>
           <Input
             value={pattern}
-            onChange={(e) => {
-              setPattern(e.target.value);
-              testRegex();
-            }}
-            placeholder="Enter regex pattern"
+            onChange={(e) => setPattern(e.target.value)}
+            placeholder="\\w+@\\w+\\.\\w+"
             className="font-mono"
           />
         </div>
@@ -40,10 +50,7 @@ export const RegexTester = () => {
           <label className="block text-sm font-medium mb-2">Flags</label>
           <Input
             value={flags}
-            onChange={(e) => {
-              setFlags(e.target.value);
-              testRegex();
-            }}
+            onChange={(e) => setFlags(e.target.value)}
             placeholder="g, i, m, etc."
             className="font-mono"
           />
@@ -54,27 +61,51 @@ export const RegexTester = () => {
         <label className="block text-sm font-medium mb-2">Test String</label>
         <Textarea
           value={testString}
-          onChange={(e) => {
-            setTestString(e.target.value);
-            testRegex();
-          }}
-          placeholder="Enter text to test"
-          className="font-mono h-32 resize-none"
+          onChange={(e) => setTestString(e.target.value)}
+          placeholder="Enter text to test against your regex pattern"
+          className="font-mono h-32 resize-y"
         />
       </div>
 
-      {matches.length > 0 && (
+      {testString && (
         <div>
-          <label className="block text-sm font-medium mb-2">
-            Matches ({matches.length})
-          </label>
-          <div className="space-y-2">
-            {matches.map((match, index) => (
-              <div key={index} className="p-2 bg-primary/10 rounded border border-primary/20">
-                <code className="text-sm">{match}</code>
-              </div>
-            ))}
+          <div className="flex items-center justify-between mb-2">
+            <label className="text-sm font-medium">
+              Matches ({matches.length})
+            </label>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => {
+                setPattern("");
+                setFlags("g");
+                setTestString("");
+              }}
+            >
+              Clear
+            </Button>
           </div>
+          
+          {matches.length > 0 ? (
+            <div className="space-y-4">
+              <div 
+                className="p-4 rounded-lg bg-muted font-mono text-sm whitespace-pre-wrap"
+                dangerouslySetInnerHTML={{ __html: highlightMatches() }}
+              />
+              <div className="space-y-2">
+                {matches.map((match, index) => (
+                  <div key={index} className="p-2 bg-primary/10 rounded border border-primary/20 flex items-center justify-between">
+                    <code className="text-sm">{match}</code>
+                    <span className="text-xs text-muted-foreground">Match {index + 1}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : pattern ? (
+            <div className="p-4 rounded-lg bg-muted text-sm text-muted-foreground text-center">
+              No matches found
+            </div>
+          ) : null}
         </div>
       )}
     </div>

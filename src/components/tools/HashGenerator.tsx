@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Copy } from "lucide-react";
+import { Copy, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import CryptoJS from "crypto-js";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 export const HashGenerator = () => {
-  const [input, setInput] = useState("");
+  const [input, setInput] = useLocalStorage("hashInput", "");
   const [hashes, setHashes] = useState({
     md5: "",
     sha256: "",
@@ -30,15 +31,26 @@ export const HashGenerator = () => {
     <div className="space-y-4">
       <div>
         <label className="block text-sm font-medium mb-2">Input Text</label>
-        <Input
-          value={input}
-          onChange={(e) => {
-            setInput(e.target.value);
-            generateHashes(e.target.value);
-          }}
-          placeholder="Enter text to hash"
-          className="font-mono"
-        />
+        <div className="flex gap-2">
+          <Input
+            value={input}
+            onChange={(e) => {
+              setInput(e.target.value);
+              generateHashes(e.target.value);
+            }}
+            placeholder="Enter text to hash"
+            className="font-mono flex-1"
+          />
+          <Button
+            variant="outline"
+            onClick={() => {
+              setInput("");
+              setHashes({ md5: "", sha256: "", sha512: "" });
+            }}
+          >
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        </div>
       </div>
 
       {input && (

@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Copy } from "lucide-react";
+import { Copy, Palette as PaletteIcon, Trash2 } from "lucide-react";
 import { toast } from "sonner";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 export const ColorPickerTool = () => {
-  const [color, setColor] = useState("#0ea5e9");
+  const [color, setColor] = useLocalStorage("colorPicker", "#0ea5e9");
+  const [colorHistory, setColorHistory] = useLocalStorage<string[]>("colorHistory", []);
 
   const hexToRgb = (hex: string) => {
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -44,17 +46,28 @@ export const ColorPickerTool = () => {
     toast.success("Copied to clipboard!");
   };
 
+  const addToHistory = (newColor: string) => {
+    if (!colorHistory.includes(newColor)) {
+      setColorHistory([newColor, ...colorHistory.slice(0, 9)]);
+    }
+  };
+
+  const handleColorChange = (newColor: string) => {
+    setColor(newColor);
+    addToHistory(newColor);
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col items-center gap-4">
         <div
-          className="w-48 h-48 rounded-lg border-2 shadow-lg"
+          className="w-48 h-48 rounded-lg border-2 shadow-lg transition-all"
           style={{ backgroundColor: color }}
         />
         <Input
           type="color"
           value={color}
-          onChange={(e) => setColor(e.target.value)}
+          onChange={(e) => handleColorChange(e.target.value)}
           className="w-48 h-12 cursor-pointer"
         />
       </div>
@@ -90,6 +103,35 @@ export const ColorPickerTool = () => {
           </Button>
         </div>
       </div>
+
+      {colorHistory.length > 0 && (
+        <div>
+          <div className="flex items-center justify-between mb-3">
+            <label className="text-sm font-medium flex items-center gap-2">
+              <PaletteIcon className="h-4 w-4" />
+              Color History
+            </label>
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => setColorHistory([])}
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          </div>
+          <div className="grid grid-cols-5 gap-2">
+            {colorHistory.map((historyColor, index) => (
+              <button
+                key={index}
+                className="h-12 rounded-lg border-2 hover:scale-110 transition-all cursor-pointer"
+                style={{ backgroundColor: historyColor }}
+                onClick={() => setColor(historyColor)}
+                title={historyColor}
+              />
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

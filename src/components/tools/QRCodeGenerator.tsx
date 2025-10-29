@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Slider } from "@/components/ui/slider";
 import { QRCodeSVG } from "qrcode.react";
-import { Download } from "lucide-react";
+import { Download, Trash2 } from "lucide-react";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 export const QRCodeGenerator = () => {
-  const [text, setText] = useState("https://example.com");
+  const [text, setText] = useLocalStorage("qrText", "https://example.com");
+  const [size, setSize] = useLocalStorage("qrSize", 256);
 
   const downloadQR = () => {
     const svg = document.getElementById("qr-code");
@@ -32,7 +35,7 @@ export const QRCodeGenerator = () => {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <div>
         <label className="block text-sm font-medium mb-2">Text or URL</label>
         <Input
@@ -42,21 +45,47 @@ export const QRCodeGenerator = () => {
         />
       </div>
 
+      <div>
+        <label className="block text-sm font-medium mb-3">
+          QR Code Size: {size}px
+        </label>
+        <Slider
+          value={[size]}
+          onValueChange={(value) => setSize(value[0])}
+          min={128}
+          max={512}
+          step={32}
+          className="mb-2"
+        />
+        <div className="flex justify-between text-xs text-muted-foreground">
+          <span>Small</span>
+          <span>Large</span>
+        </div>
+      </div>
+
       {text && (
         <div className="flex flex-col items-center gap-4">
           <div className="p-6 bg-white rounded-lg">
             <QRCodeSVG
               id="qr-code"
               value={text}
-              size={256}
+              size={size}
               level="H"
               includeMargin
             />
           </div>
-          <Button onClick={downloadQR} className="w-full md:w-auto">
-            <Download className="h-4 w-4 mr-2" />
-            Download QR Code
-          </Button>
+          <div className="flex gap-2 w-full">
+            <Button onClick={downloadQR} className="flex-1">
+              <Download className="h-4 w-4 mr-2" />
+              Download QR Code
+            </Button>
+            <Button 
+              variant="outline"
+              onClick={() => setText("")}
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
       )}
     </div>
