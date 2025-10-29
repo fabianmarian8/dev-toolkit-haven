@@ -27,9 +27,6 @@ export const ImageCompressor = () => {
   const compressImage = useCallback(async (file: File) => {
     setIsCompressing(true);
 
-    // Cleanup old compressed image
-    if (compressedImage) URL.revokeObjectURL(compressedImage);
-
     try {
       const options = {
         maxSizeMB: quality / 100,
@@ -42,7 +39,12 @@ export const ImageCompressor = () => {
       setCompressedSize(compressed.size);
 
       const compressedUrl = URL.createObjectURL(compressed);
-      setCompressedImage(compressedUrl);
+
+      // Cleanup old compressed image before setting new one
+      setCompressedImage((oldUrl) => {
+        if (oldUrl) URL.revokeObjectURL(oldUrl);
+        return compressedUrl;
+      });
 
       const reduction = Math.round(((file.size - compressed.size) / file.size) * 100);
       toast.success(`Compressed! ${reduction}% smaller`);
@@ -51,7 +53,7 @@ export const ImageCompressor = () => {
     } finally {
       setIsCompressing(false);
     }
-  }, [quality, compressedImage]);
+  }, [quality]);
 
   // Recompress when quality changes
   useEffect(() => {
