@@ -71,17 +71,18 @@ export const ImageCompressor = () => {
       {!originalImage ? (
         <div className="border-2 border-dashed rounded-lg p-12 text-center">
           <Upload className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-          <label className="cursor-pointer">
+          <label htmlFor="image-upload" className="cursor-pointer block">
             <span className="text-sm text-muted-foreground">
               Click to upload or drag and drop
             </span>
-            <Input
-              type="file"
-              accept="image/*"
-              onChange={handleImageUpload}
-              className="hidden"
-            />
           </label>
+          <Input
+            id="image-upload"
+            type="file"
+            accept="image/*"
+            onChange={handleImageUpload}
+            className="hidden"
+          />
           <p className="text-xs text-muted-foreground mt-2">PNG, JPG, WebP up to 10MB</p>
         </div>
       ) : (
