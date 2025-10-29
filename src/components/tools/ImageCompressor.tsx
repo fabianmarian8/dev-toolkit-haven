@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
@@ -24,7 +24,7 @@ export const ImageCompressor = () => {
   }, [originalUrl, compressedImage]);
 
   // Compress image with current quality setting
-  const compressImage = async (file: File) => {
+  const compressImage = useCallback(async (file: File) => {
     setIsCompressing(true);
 
     // Cleanup old compressed image
@@ -51,14 +51,14 @@ export const ImageCompressor = () => {
     } finally {
       setIsCompressing(false);
     }
-  };
+  }, [quality, compressedImage]);
 
   // Recompress when quality changes
   useEffect(() => {
-    if (originalImage && !isCompressing) {
+    if (originalImage) {
       compressImage(originalImage);
     }
-  }, [quality]);
+  }, [quality, originalImage, compressImage]);
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
