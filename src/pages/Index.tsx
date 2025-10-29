@@ -84,12 +84,11 @@ const Index = () => {
   const navigate = useNavigate();
   
   const getToolFromPath = (path: string) => {
-    if (path === "/") return "json";
     return path.substring(1);
   };
 
   const [activeTool, setActiveTool] = useLocalStorage(
-    "lastTool", 
+    "lastTool",
     getToolFromPath(location.pathname)
   );
 
@@ -114,7 +113,7 @@ const Index = () => {
         <div className="md:hidden p-4 border-b flex items-center gap-3">
           <MobileSidebar activeTool={activeTool} onToolChange={handleToolChange} />
           <h1 className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-            DevTools Hub
+            Free DevTools
           </h1>
         </div>
         <div className="container max-w-4xl py-8 px-4">

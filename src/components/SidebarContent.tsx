@@ -1,4 +1,4 @@
-import { Code2, FileJson, FileText, Image, Hash, QrCode, GitCompare, Link2, Regex, Palette, KeyRound, Clock } from "lucide-react";
+import { Code2, FileJson, FileText, Image, Hash, QrCode, GitCompare, Link2, Regex, Palette, KeyRound, Clock, Home } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "./ThemeToggle";
@@ -25,13 +25,27 @@ const tools = [
 
 export const SidebarContent = ({ activeTool, onToolChange }: SidebarContentProps) => {
   const location = useLocation();
+  const isHomePage = location.pathname === "/";
 
   return (
     <div className="flex flex-col h-full">
       <nav className="flex flex-col gap-1 p-4 flex-1">
+        <Link
+          to="/"
+          className={cn(
+            "flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all mb-2",
+            isHomePage
+              ? "bg-primary text-primary-foreground shadow-glow"
+              : "text-foreground hover:bg-muted"
+          )}
+        >
+          <Home className="h-5 w-5" />
+          <span>Home</span>
+        </Link>
+        <div className="border-t mb-2" />
         {tools.map((tool) => {
           const Icon = tool.icon;
-          const isActive = location.pathname === tool.path || (location.pathname === "/" && tool.id === "json");
+          const isActive = location.pathname === tool.path;
           return (
             <Link
               key={tool.id}
