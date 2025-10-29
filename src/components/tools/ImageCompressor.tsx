@@ -23,18 +23,12 @@ export const ImageCompressor = () => {
     };
   }, [originalUrl, compressedImage]);
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    if (originalUrl) URL.revokeObjectURL(originalUrl);
-    if (compressedImage) URL.revokeObjectURL(compressedImage);
-
-    setOriginalImage(file);
-    setOriginalSize(file.size);
-    const url = URL.createObjectURL(file);
-    setOriginalUrl(url);
+  // Compress image with current quality setting
+  const compressImage = async (file: File) => {
     setIsCompressing(true);
+
+    // Cleanup old compressed image
+    if (compressedImage) URL.revokeObjectURL(compressedImage);
 
     try {
       const options = {
@@ -46,16 +40,40 @@ export const ImageCompressor = () => {
 
       const compressed = await imageCompression(file, options);
       setCompressedSize(compressed.size);
-      
+
       const compressedUrl = URL.createObjectURL(compressed);
       setCompressedImage(compressedUrl);
-      
-      toast.success(`Image compressed! Reduced by ${Math.round(((file.size - compressed.size) / file.size) * 100)}%`);
+
+      const reduction = Math.round(((file.size - compressed.size) / file.size) * 100);
+      toast.success(`Compressed! ${reduction}% smaller`);
     } catch (error) {
       toast.error("Compression failed: " + (error as Error).message);
     } finally {
       setIsCompressing(false);
     }
+  };
+
+  // Recompress when quality changes
+  useEffect(() => {
+    if (originalImage && !isCompressing) {
+      compressImage(originalImage);
+    }
+  }, [quality]);
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (originalUrl) URL.revokeObjectURL(originalUrl);
+    if (compressedImage) URL.revokeObjectURL(compressedImage);
+
+    setOriginalImage(file);
+    setOriginalSize(file.size);
+    const url = URL.createObjectURL(file);
+    setOriginalUrl(url);
+
+    // Initial compression
+    await compressImage(file);
   };
 
   const downloadCompressed = () => {
