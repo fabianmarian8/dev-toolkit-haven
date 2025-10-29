@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
@@ -16,6 +16,11 @@ export const ImageCompressor = () => {
   const [quality, setQuality] = useLocalStorage("imageQuality", 80);
   const [isCompressing, setIsCompressing] = useState(false);
 
+  // Use ref to track if compression is in progress (prevents loop)
+  const isCompressingRef = useRef(false);
+  // Track last compressed quality to prevent unnecessary recompressions
+  const lastQualityRef = useRef<number>(quality);
+
   useEffect(() => {
     return () => {
       if (originalUrl) URL.revokeObjectURL(originalUrl);
@@ -23,7 +28,14 @@ export const ImageCompressor = () => {
     };
   }, [originalUrl, compressedImage]);
 
-  const compressImage = async (file: File) => {
+  // Compress image with current quality setting
+  const compressImage = useCallback(async (file: File, showToast = true) => {
+    // Prevent concurrent compressions
+    if (isCompressingRef.current) {
+      return;
+    }
+
+    isCompressingRef.current = true;
     setIsCompressing(true);
 
     try {
@@ -36,8 +48,7 @@ export const ImageCompressor = () => {
 
       const compressed = await imageCompression(file, options);
       setCompressedSize(compressed.size);
-      
-      if (compressedImage) URL.revokeObjectURL(compressedImage);
+
       const compressedUrl = URL.createObjectURL(compressed);
 
       // Cleanup old compressed image before setting new one
@@ -46,19 +57,29 @@ export const ImageCompressor = () => {
         return compressedUrl;
       });
 
-      const reduction = Math.round(((file.size - compressed.size) / file.size) * 100);
-      toast.success(`Compressed! ${reduction}% smaller`);
+      // Update last quality ref
+      lastQualityRef.current = quality;
+
+      if (showToast) {
+        const reduction = Math.round(((file.size - compressed.size) / file.size) * 100);
+        toast.success(`Compressed! ${reduction}% smaller`);
+      }
     } catch (error) {
       toast.error("Compression failed: " + (error as Error).message);
     } finally {
+      isCompressingRef.current = false;
       setIsCompressing(false);
     }
   }, [quality]);
 
-  // Recompress when quality changes
+  // Recompress when quality changes (with debouncing via ref check)
   useEffect(() => {
-    if (originalImage) {
-      compressImage(originalImage);
+    // Only recompress if:
+    // 1. Image exists
+    // 2. Not currently compressing
+    // 3. Quality actually changed from last compression
+    if (originalImage && !isCompressingRef.current && lastQualityRef.current !== quality) {
+      compressImage(originalImage, false); // Don't show toast for slider adjustments
     }
   }, [quality, originalImage, compressImage]);
 
@@ -74,29 +95,8 @@ export const ImageCompressor = () => {
     const url = URL.createObjectURL(file);
     setOriginalUrl(url);
 
-    // Initial compression
-    await compressImage(file);
-  };
-
-  useEffect(() => {
-    if (originalImage && !isCompressing) {
-      compressImage(originalImage);
-    }
-  }, [quality]);
-
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    if (originalUrl) URL.revokeObjectURL(originalUrl);
-    if (compressedImage) URL.revokeObjectURL(compressedImage);
-
-    setOriginalImage(file);
-    setOriginalSize(file.size);
-    const url = URL.createObjectURL(file);
-    setOriginalUrl(url);
-    
-    compressImage(file);
+    // Initial compression with toast
+    await compressImage(file, true);
   };
 
   const downloadCompressed = () => {
@@ -170,7 +170,7 @@ export const ImageCompressor = () => {
               )}
             </div>
           </div>
-          
+
           <div className="flex gap-2">
             {compressedImage && (
               <Button onClick={downloadCompressed} className="flex-1">
