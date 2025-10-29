@@ -23,17 +23,7 @@ export const ImageCompressor = () => {
     };
   }, [originalUrl, compressedImage]);
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    if (originalUrl) URL.revokeObjectURL(originalUrl);
-    if (compressedImage) URL.revokeObjectURL(compressedImage);
-
-    setOriginalImage(file);
-    setOriginalSize(file.size);
-    const url = URL.createObjectURL(file);
-    setOriginalUrl(url);
+  const compressImage = async (file: File) => {
     setIsCompressing(true);
 
     try {
@@ -47,6 +37,7 @@ export const ImageCompressor = () => {
       const compressed = await imageCompression(file, options);
       setCompressedSize(compressed.size);
       
+      if (compressedImage) URL.revokeObjectURL(compressedImage);
       const compressedUrl = URL.createObjectURL(compressed);
       setCompressedImage(compressedUrl);
       
@@ -56,6 +47,27 @@ export const ImageCompressor = () => {
     } finally {
       setIsCompressing(false);
     }
+  };
+
+  useEffect(() => {
+    if (originalImage && !isCompressing) {
+      compressImage(originalImage);
+    }
+  }, [quality]);
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (originalUrl) URL.revokeObjectURL(originalUrl);
+    if (compressedImage) URL.revokeObjectURL(compressedImage);
+
+    setOriginalImage(file);
+    setOriginalSize(file.size);
+    const url = URL.createObjectURL(file);
+    setOriginalUrl(url);
+    
+    compressImage(file);
   };
 
   const downloadCompressed = () => {
