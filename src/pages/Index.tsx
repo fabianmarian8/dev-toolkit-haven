@@ -14,56 +14,56 @@ import { TextDiff } from "@/components/tools/TextDiff";
 import { URLTool } from "@/components/tools/URLTool";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 
-const toolsMap: Record<string, { component: React.ReactNode; title: string; description: string }> = {
-  "/json": { 
-    component: <JsonFormatter />, 
-    title: "JSON Formatter", 
-    description: "Format, validate, and minify JSON data" 
+const toolsMap: Record<string, { component: () => React.ReactNode; title: string; description: string }> = {
+  "/json": {
+    component: () => <JsonFormatter />,
+    title: "JSON Formatter",
+    description: "Format, validate, and minify JSON data"
   },
-  "/base64": { 
-    component: <Base64Tool />, 
-    title: "Base64 Encoder/Decoder", 
-    description: "Encode and decode Base64 strings" 
+  "/base64": {
+    component: () => <Base64Tool />,
+    title: "Base64 Encoder/Decoder",
+    description: "Encode and decode Base64 strings"
   },
-  "/image": { 
-    component: <ImageCompressor />, 
-    title: "Image Compressor", 
-    description: "Compress and optimize images" 
+  "/image": {
+    component: () => <ImageCompressor />,
+    title: "Image Compressor",
+    description: "Compress and optimize images"
   },
-  "/color": { 
-    component: <ColorPickerTool />, 
-    title: "Color Picker", 
-    description: "Pick colors and convert between formats" 
+  "/color": {
+    component: () => <ColorPickerTool />,
+    title: "Color Picker",
+    description: "Pick colors and convert between formats"
   },
-  "/regex": { 
-    component: <RegexTester />, 
-    title: "Regex Tester", 
-    description: "Test and debug regular expressions" 
+  "/regex": {
+    component: () => <RegexTester />,
+    title: "Regex Tester",
+    description: "Test and debug regular expressions"
   },
-  "/markdown": { 
-    component: <MarkdownPreview />, 
-    title: "Markdown Preview", 
-    description: "Preview markdown in real-time" 
+  "/markdown": {
+    component: () => <MarkdownPreview />,
+    title: "Markdown Preview",
+    description: "Preview markdown in real-time"
   },
-  "/hash": { 
-    component: <HashGenerator />, 
-    title: "Hash Generator", 
-    description: "Generate MD5, SHA-256, and SHA-512 hashes" 
+  "/hash": {
+    component: () => <HashGenerator />,
+    title: "Hash Generator",
+    description: "Generate MD5, SHA-256, and SHA-512 hashes"
   },
-  "/qr": { 
-    component: <QRCodeGenerator />, 
-    title: "QR Code Generator", 
-    description: "Create QR codes from text" 
+  "/qr": {
+    component: () => <QRCodeGenerator />,
+    title: "QR Code Generator",
+    description: "Create QR codes from text"
   },
-  "/diff": { 
-    component: <TextDiff />, 
-    title: "Text Diff", 
-    description: "Compare text differences" 
+  "/diff": {
+    component: () => <TextDiff />,
+    title: "Text Diff",
+    description: "Compare text differences"
   },
-  "/url": { 
-    component: <URLTool />, 
-    title: "URL Encoder/Decoder", 
-    description: "Encode and decode URLs" 
+  "/url": {
+    component: () => <URLTool />,
+    title: "URL Encoder/Decoder",
+    description: "Encode and decode URLs"
   },
 };
 
@@ -87,7 +87,7 @@ const Index = () => {
     if (toolFromPath !== activeTool) {
       setActiveTool(toolFromPath);
     }
-  }, [location.pathname]);
+  }, [location.pathname, activeTool]);
 
   useEffect(() => {
     setLastTool(activeTool);
@@ -116,7 +116,7 @@ const Index = () => {
             <p className="text-muted-foreground">{currentTool.description}</p>
           </div>
           <div className="bg-gradient-card rounded-xl shadow-glow p-6 border">
-            {currentTool.component}
+            {currentTool.component()}
           </div>
         </div>
       </main>

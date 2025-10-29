@@ -23,14 +23,34 @@ export const RegexTester = () => {
     }
   }, [pattern, flags, testString]);
 
-  const highlightMatches = () => {
-    if (!pattern || !testString || matches.length === 0) return testString;
-    
+  const renderHighlightedText = () => {
+    if (!pattern || !testString || matches.length === 0) {
+      return <>{testString}</>;
+    }
+
     try {
-      const regex = new RegExp(pattern, flags);
-      return testString.replace(regex, (match) => `<mark class="bg-primary/20 rounded px-1">${match}</mark>`);
+      const regex = new RegExp(pattern, flags.replace('g', '')); // Remove 'g' flag for split
+      const parts = testString.split(regex);
+      const result: React.ReactNode[] = [];
+
+      let matchIndex = 0;
+      parts.forEach((part, i) => {
+        if (i > 0 && matchIndex < matches.length) {
+          result.push(
+            <mark key={`match-${i}`} className="bg-primary/20 rounded px-1">
+              {matches[matchIndex]}
+            </mark>
+          );
+          matchIndex++;
+        }
+        if (part) {
+          result.push(<span key={`text-${i}`}>{part}</span>);
+        }
+      });
+
+      return <>{result}</>;
     } catch {
-      return testString;
+      return <>{testString}</>;
     }
   };
 
@@ -88,10 +108,9 @@ export const RegexTester = () => {
           
           {matches.length > 0 ? (
             <div className="space-y-4">
-              <div 
-                className="p-4 rounded-lg bg-muted font-mono text-sm whitespace-pre-wrap"
-                dangerouslySetInnerHTML={{ __html: highlightMatches() }}
-              />
+              <div className="p-4 rounded-lg bg-muted font-mono text-sm whitespace-pre-wrap">
+                {renderHighlightedText()}
+              </div>
               <div className="space-y-2">
                 {matches.map((match, index) => (
                   <div key={index} className="p-2 bg-primary/10 rounded border border-primary/20 flex items-center justify-between">
