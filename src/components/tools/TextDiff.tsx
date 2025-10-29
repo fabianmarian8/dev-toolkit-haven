@@ -1,19 +1,27 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { diffLines, Change } from "diff";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { useDebounce } from "@/hooks/useDebounce";
+import { TEXT_DIFF } from "@/constants";
 import { Trash2 } from "lucide-react";
 
 export const TextDiff = () => {
   const [text1, setText1] = useLocalStorage("diffText1", "");
   const [text2, setText2] = useLocalStorage("diffText2", "");
+  const debouncedText1 = useDebounce(text1, TEXT_DIFF.DEBOUNCE_DELAY);
+  const debouncedText2 = useDebounce(text2, TEXT_DIFF.DEBOUNCE_DELAY);
   const [diff, setDiff] = useState<Change[]>([]);
 
-  const calculateDiff = (t1: string, t2: string) => {
-    const differences = diffLines(t1, t2);
-    setDiff(differences);
-  };
+  useEffect(() => {
+    if (debouncedText1 || debouncedText2) {
+      const differences = diffLines(debouncedText1, debouncedText2);
+      setDiff(differences);
+    } else {
+      setDiff([]);
+    }
+  }, [debouncedText1, debouncedText2]);
 
   return (
     <div className="space-y-4">
@@ -22,24 +30,20 @@ export const TextDiff = () => {
           <label className="block text-sm font-medium mb-2">Text 1 (Original)</label>
           <Textarea
             value={text1}
-            onChange={(e) => {
-              setText1(e.target.value);
-              calculateDiff(e.target.value, text2);
-            }}
+            onChange={(e) => setText1(e.target.value)}
             placeholder="Enter first text"
             className="font-mono h-48 resize-y"
+            aria-label="First text for comparison"
           />
         </div>
         <div>
           <label className="block text-sm font-medium mb-2">Text 2 (Modified)</label>
           <Textarea
             value={text2}
-            onChange={(e) => {
-              setText2(e.target.value);
-              calculateDiff(text1, e.target.value);
-            }}
+            onChange={(e) => setText2(e.target.value)}
             placeholder="Enter second text"
             className="font-mono h-48 resize-y"
+            aria-label="Second text for comparison"
           />
         </div>
       </div>

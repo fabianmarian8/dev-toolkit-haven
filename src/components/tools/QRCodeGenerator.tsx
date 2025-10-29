@@ -5,10 +5,11 @@ import { Slider } from "@/components/ui/slider";
 import { QRCodeSVG } from "qrcode.react";
 import { Download, Trash2 } from "lucide-react";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { QR_CODE } from "@/constants";
 
 export const QRCodeGenerator = () => {
   const [text, setText] = useLocalStorage("qrText", "https://example.com");
-  const [size, setSize] = useLocalStorage("qrSize", 256);
+  const [size, setSize] = useLocalStorage("qrSize", QR_CODE.DEFAULT_SIZE);
 
   const downloadQR = () => {
     const svg = document.getElementById("qr-code");
@@ -52,10 +53,11 @@ export const QRCodeGenerator = () => {
         <Slider
           value={[size]}
           onValueChange={(value) => setSize(value[0])}
-          min={128}
-          max={512}
-          step={32}
+          min={QR_CODE.MIN_SIZE}
+          max={QR_CODE.MAX_SIZE}
+          step={QR_CODE.SIZE_STEP}
           className="mb-2"
+          aria-valuetext={`${size} pixels`}
         />
         <div className="flex justify-between text-xs text-muted-foreground">
           <span>Small</span>

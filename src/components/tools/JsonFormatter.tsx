@@ -1,14 +1,30 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { Copy, Check, Trash2 } from "lucide-react";
+import { Copy, Check, Trash2, CheckCircle, XCircle } from "lucide-react";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 export const JsonFormatter = () => {
   const [input, setInput] = useLocalStorage("jsonInput", "");
   const [output, setOutput] = useState("");
   const [copied, setCopied] = useState(false);
+  const [isValid, setIsValid] = useState<boolean | null>(null);
+
+  // Live validation
+  useEffect(() => {
+    if (!input.trim()) {
+      setIsValid(null);
+      return;
+    }
+
+    try {
+      JSON.parse(input);
+      setIsValid(true);
+    } catch {
+      setIsValid(false);
+    }
+  }, [input]);
 
   const formatJson = () => {
     try {
@@ -42,12 +58,37 @@ export const JsonFormatter = () => {
   return (
     <div className="space-y-4">
       <div>
-        <label className="block text-sm font-medium mb-2">Input JSON</label>
+        <div className="flex items-center justify-between mb-2">
+          <label className="text-sm font-medium">Input JSON</label>
+          {isValid !== null && (
+            <div className="flex items-center gap-1 text-sm">
+              {isValid ? (
+                <>
+                  <CheckCircle className="h-4 w-4 text-green-500" />
+                  <span className="text-green-500">Valid JSON</span>
+                </>
+              ) : (
+                <>
+                  <XCircle className="h-4 w-4 text-destructive" />
+                  <span className="text-destructive">Invalid JSON</span>
+                </>
+              )}
+            </div>
+          )}
+        </div>
         <Textarea
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder='{"key": "value", "array": [1, 2, 3]}'
-          className="font-mono h-48 resize-y"
+          className={`font-mono h-48 resize-y transition-colors ${
+            isValid === true
+              ? "border-green-500 focus:border-green-500"
+              : isValid === false
+              ? "border-destructive focus:border-destructive"
+              : ""
+          }`}
+          aria-label="JSON input"
+          aria-invalid={isValid === false}
         />
       </div>
       <div className="flex gap-2">

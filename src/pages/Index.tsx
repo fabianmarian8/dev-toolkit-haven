@@ -12,6 +12,8 @@ import { HashGenerator } from "@/components/tools/HashGenerator";
 import { QRCodeGenerator } from "@/components/tools/QRCodeGenerator";
 import { TextDiff } from "@/components/tools/TextDiff";
 import { URLTool } from "@/components/tools/URLTool";
+import { UUIDGenerator } from "@/components/tools/UUIDGenerator";
+import { TimestampConverter } from "@/components/tools/TimestampConverter";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 const toolsMap: Record<string, { component: () => React.ReactNode; title: string; description: string }> = {
@@ -64,6 +66,16 @@ const toolsMap: Record<string, { component: () => React.ReactNode; title: string
     component: () => <URLTool />,
     title: "URL Encoder/Decoder",
     description: "Encode and decode URLs"
+  },
+  "/uuid": {
+    component: () => <UUIDGenerator />,
+    title: "UUID Generator",
+    description: "Generate UUIDs (v4)"
+  },
+  "/timestamp": {
+    component: () => <TimestampConverter />,
+    title: "Timestamp Converter",
+    description: "Convert between timestamps and dates"
   },
 };
 
