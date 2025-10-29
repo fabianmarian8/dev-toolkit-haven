@@ -28,14 +28,7 @@ export const ImageCompressor = () => {
     };
   }, [originalUrl, compressedImage]);
 
-  // Compress image with current quality setting
-  const compressImage = useCallback(async (file: File, showToast = true) => {
-    // Prevent concurrent compressions
-    if (isCompressingRef.current) {
-      return;
-    }
-
-    isCompressingRef.current = true;
+  const compressImage = useCallback(async (file: File) => {
     setIsCompressing(true);
 
     try {
@@ -48,10 +41,9 @@ export const ImageCompressor = () => {
 
       const compressed = await imageCompression(file, options);
       setCompressedSize(compressed.size);
-
+      
       const compressedUrl = URL.createObjectURL(compressed);
 
-      // Cleanup old compressed image before setting new one
       setCompressedImage((oldUrl) => {
         if (oldUrl) URL.revokeObjectURL(oldUrl);
         return compressedUrl;
@@ -74,14 +66,10 @@ export const ImageCompressor = () => {
 
   // Recompress when quality changes (with debouncing via ref check)
   useEffect(() => {
-    // Only recompress if:
-    // 1. Image exists
-    // 2. Not currently compressing
-    // 3. Quality actually changed from last compression
-    if (originalImage && !isCompressingRef.current && lastQualityRef.current !== quality) {
-      compressImage(originalImage, false); // Don't show toast for slider adjustments
+    if (originalImage && !isCompressing) {
+      compressImage(originalImage);
     }
-  }, [quality, originalImage, compressImage]);
+  }, [quality, originalImage, compressImage, isCompressing]);
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -94,9 +82,8 @@ export const ImageCompressor = () => {
     setOriginalSize(file.size);
     const url = URL.createObjectURL(file);
     setOriginalUrl(url);
-
-    // Initial compression with toast
-    await compressImage(file, true);
+    
+    compressImage(file);
   };
 
   const downloadCompressed = () => {

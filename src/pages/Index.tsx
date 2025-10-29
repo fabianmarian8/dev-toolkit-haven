@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Sidebar } from "@/components/Sidebar";
 import { MobileSidebar } from "@/components/MobileSidebar";
@@ -70,28 +70,23 @@ const toolsMap: Record<string, { component: () => React.ReactNode; title: string
 const Index = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [lastTool, setLastTool] = useLocalStorage("lastTool", "json");
   
   const getToolFromPath = (path: string) => {
     if (path === "/") return "json";
     return path.substring(1);
   };
 
-  const [activeTool, setActiveTool] = useState(() => {
-    const toolFromPath = getToolFromPath(location.pathname);
-    return toolFromPath;
-  });
+  const [activeTool, setActiveTool] = useLocalStorage(
+    "lastTool", 
+    getToolFromPath(location.pathname)
+  );
 
   useEffect(() => {
     const toolFromPath = getToolFromPath(location.pathname);
     if (toolFromPath !== activeTool) {
       setActiveTool(toolFromPath);
     }
-  }, [location.pathname, activeTool]);
-
-  useEffect(() => {
-    setLastTool(activeTool);
-  }, [activeTool, setLastTool]);
+  }, [location.pathname, activeTool, setActiveTool]);
 
   const handleToolChange = (tool: string) => {
     setActiveTool(tool);
