@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
@@ -15,6 +15,11 @@ export const ImageCompressor = () => {
   const [compressedSize, setCompressedSize] = useState(0);
   const [quality, setQuality] = useLocalStorage("imageQuality", 80);
   const [isCompressing, setIsCompressing] = useState(false);
+
+  // Use ref to track if compression is in progress (prevents loop)
+  const isCompressingRef = useRef(false);
+  // Track last compressed quality to prevent unnecessary recompressions
+  const lastQualityRef = useRef<number>(quality);
 
   useEffect(() => {
     return () => {
@@ -44,16 +49,22 @@ export const ImageCompressor = () => {
         return compressedUrl;
       });
 
-      const reduction = Math.round(((file.size - compressed.size) / file.size) * 100);
-      toast.success(`Compressed! ${reduction}% smaller`);
+      // Update last quality ref
+      lastQualityRef.current = quality;
+
+      if (showToast) {
+        const reduction = Math.round(((file.size - compressed.size) / file.size) * 100);
+        toast.success(`Compressed! ${reduction}% smaller`);
+      }
     } catch (error) {
       toast.error("Compression failed: " + (error as Error).message);
     } finally {
+      isCompressingRef.current = false;
       setIsCompressing(false);
     }
   }, [quality]);
 
-  // Recompress when quality changes
+  // Recompress when quality changes (with debouncing via ref check)
   useEffect(() => {
     if (originalImage && !isCompressing) {
       compressImage(originalImage);
@@ -146,7 +157,7 @@ export const ImageCompressor = () => {
               )}
             </div>
           </div>
-          
+
           <div className="flex gap-2">
             {compressedImage && (
               <Button onClick={downloadCompressed} className="flex-1">
