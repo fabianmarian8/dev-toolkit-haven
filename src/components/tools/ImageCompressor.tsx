@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
@@ -39,14 +39,43 @@ export const ImageCompressor = () => {
       
       if (compressedImage) URL.revokeObjectURL(compressedImage);
       const compressedUrl = URL.createObjectURL(compressed);
-      setCompressedImage(compressedUrl);
-      
-      toast.success(`Image compressed! Reduced by ${Math.round(((file.size - compressed.size) / file.size) * 100)}%`);
+
+      // Cleanup old compressed image before setting new one
+      setCompressedImage((oldUrl) => {
+        if (oldUrl) URL.revokeObjectURL(oldUrl);
+        return compressedUrl;
+      });
+
+      const reduction = Math.round(((file.size - compressed.size) / file.size) * 100);
+      toast.success(`Compressed! ${reduction}% smaller`);
     } catch (error) {
       toast.error("Compression failed: " + (error as Error).message);
     } finally {
       setIsCompressing(false);
     }
+  }, [quality]);
+
+  // Recompress when quality changes
+  useEffect(() => {
+    if (originalImage) {
+      compressImage(originalImage);
+    }
+  }, [quality, originalImage, compressImage]);
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (originalUrl) URL.revokeObjectURL(originalUrl);
+    if (compressedImage) URL.revokeObjectURL(compressedImage);
+
+    setOriginalImage(file);
+    setOriginalSize(file.size);
+    const url = URL.createObjectURL(file);
+    setOriginalUrl(url);
+
+    // Initial compression
+    await compressImage(file);
   };
 
   useEffect(() => {
