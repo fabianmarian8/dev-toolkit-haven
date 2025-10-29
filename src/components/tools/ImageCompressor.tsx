@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import imageCompression from "browser-image-compression";
 import { Download, Upload } from "lucide-react";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { IMAGE_COMPRESSOR } from "@/constants";
 
 export const ImageCompressor = () => {
   const [originalImage, setOriginalImage] = useState<File | null>(null);
@@ -13,7 +14,7 @@ export const ImageCompressor = () => {
   const [compressedImage, setCompressedImage] = useState<string>("");
   const [originalSize, setOriginalSize] = useState(0);
   const [compressedSize, setCompressedSize] = useState(0);
-  const [quality, setQuality] = useLocalStorage("imageQuality", 80);
+  const [quality, setQuality] = useLocalStorage("imageQuality", IMAGE_COMPRESSOR.DEFAULT_QUALITY);
   const [isCompressing, setIsCompressing] = useState(false);
 
   // Use refs to prevent infinite loops
@@ -48,7 +49,7 @@ export const ImageCompressor = () => {
 
       const options = {
         maxSizeMB: currentQuality / 100,
-        maxWidthOrHeight: 1920,
+        maxWidthOrHeight: IMAGE_COMPRESSOR.MAX_DIMENSION,
         useWebWorker: true,
         initialQuality: currentQuality / 100,
       };
@@ -84,9 +85,18 @@ export const ImageCompressor = () => {
     }
   }, [quality, originalImage]); // No compressImage here!
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  const processFile = async (file: File) => {
+    // Validate file size
+    if (file.size > IMAGE_COMPRESSOR.MAX_FILE_SIZE) {
+      toast.error(`File is too large. Maximum size is ${IMAGE_COMPRESSOR.MAX_FILE_SIZE / 1024 / 1024}MB`);
+      return;
+    }
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      toast.error("Please upload a valid image file");
+      return;
+    }
 
     if (originalUrl) URL.revokeObjectURL(originalUrl);
     if (compressedImage) URL.revokeObjectURL(compressedImage);
@@ -97,6 +107,24 @@ export const ImageCompressor = () => {
     setOriginalUrl(url);
 
     await compressImage(file, true); // With toast
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    await processFile(file);
+  };
+
+  const handleDrop = async (e: React.DragEvent) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      await processFile(file);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
   };
 
   const downloadCompressed = () => {
@@ -110,7 +138,11 @@ export const ImageCompressor = () => {
   return (
     <div className="space-y-6">
       {!originalImage ? (
-        <div className="border-2 border-dashed rounded-lg p-12 text-center">
+        <div
+          className="border-2 border-dashed rounded-lg p-12 text-center transition-colors hover:border-primary"
+          onDrop={handleDrop}
+          onDragOver={handleDragOver}
+        >
           <Upload className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
           <label htmlFor="image-upload" className="cursor-pointer block">
             <span className="text-sm text-muted-foreground">
@@ -123,6 +155,7 @@ export const ImageCompressor = () => {
             accept="image/*"
             onChange={handleImageUpload}
             className="hidden"
+            aria-label="Upload image file"
           />
           <p className="text-xs text-muted-foreground mt-2">PNG, JPG, WebP up to 10MB</p>
         </div>
@@ -135,10 +168,11 @@ export const ImageCompressor = () => {
             <Slider
               value={[quality]}
               onValueChange={(value) => setQuality(value[0])}
-              min={10}
-              max={100}
-              step={5}
+              min={IMAGE_COMPRESSOR.MIN_QUALITY}
+              max={IMAGE_COMPRESSOR.MAX_QUALITY}
+              step={IMAGE_COMPRESSOR.QUALITY_STEP}
               className="mb-2"
+              aria-valuetext={`${quality} percent quality`}
             />
             <div className="flex justify-between text-xs text-muted-foreground">
               <span>Smaller file</span>

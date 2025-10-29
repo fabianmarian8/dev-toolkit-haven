@@ -10,16 +10,23 @@ export const RegexTester = () => {
   const [flags, setFlags] = useLocalStorage("regexFlags", "g");
   const [testString, setTestString] = useLocalStorage("regexTestString", "");
   const [matches, setMatches] = useState<string[]>([]);
+  const [error, setError] = useState<string>("");
 
   useEffect(() => {
-    if (!pattern || !testString) return;
-    
+    if (!pattern || !testString) {
+      setMatches([]);
+      setError("");
+      return;
+    }
+
     try {
       const regex = new RegExp(pattern, flags);
       const found = testString.match(regex);
       setMatches(found || []);
+      setError("");
     } catch (error) {
       setMatches([]);
+      setError((error as Error).message);
     }
   }, [pattern, flags, testString]);
 
@@ -84,10 +91,17 @@ export const RegexTester = () => {
           onChange={(e) => setTestString(e.target.value)}
           placeholder="Enter text to test against your regex pattern"
           className="font-mono h-32 resize-y"
+          aria-label="Test string for regex matching"
         />
       </div>
 
-      {testString && (
+      {error && (
+        <div className="p-3 bg-destructive/10 text-destructive rounded-lg border border-destructive/20">
+          <strong>Invalid regex:</strong> {error}
+        </div>
+      )}
+
+      {testString && !error && (
         <div>
           <div className="flex items-center justify-between mb-2">
             <label className="text-sm font-medium">

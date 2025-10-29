@@ -9,16 +9,22 @@ export const ColorPickerTool = () => {
   const [color, setColor] = useLocalStorage("colorPicker", "#0ea5e9");
   const [colorHistory, setColorHistory] = useLocalStorage<string[]>("colorHistory", []);
 
+  const isValidHex = (hex: string): boolean => {
+    return /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.test(hex);
+  };
+
   const hexToRgb = (hex: string) => {
+    if (!isValidHex(hex)) return "Invalid color";
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return result
       ? `rgb(${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)})`
-      : "";
+      : "Invalid color";
   };
 
   const hexToHsl = (hex: string) => {
+    if (!isValidHex(hex)) return "Invalid color";
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    if (!result) return "";
+    if (!result) return "Invalid color";
 
     let r = parseInt(result[1], 16) / 255;
     let g = parseInt(result[2], 16) / 255;
@@ -127,6 +133,7 @@ export const ColorPickerTool = () => {
                 style={{ backgroundColor: historyColor }}
                 onClick={() => setColor(historyColor)}
                 title={historyColor}
+                aria-label={`Select color ${historyColor}`}
               />
             ))}
           </div>

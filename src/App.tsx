@@ -28,6 +28,8 @@ const App = () => (
             <Route path="/qr" element={<Index />} />
             <Route path="/diff" element={<Index />} />
             <Route path="/url" element={<Index />} />
+            <Route path="/uuid" element={<Index />} />
+            <Route path="/timestamp" element={<Index />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

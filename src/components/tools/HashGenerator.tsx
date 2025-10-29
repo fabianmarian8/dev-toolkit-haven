@@ -1,26 +1,33 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Copy, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import CryptoJS from "crypto-js";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { useDebounce } from "@/hooks/useDebounce";
+import { HASH_GENERATOR } from "@/constants";
 
 export const HashGenerator = () => {
   const [input, setInput] = useLocalStorage("hashInput", "");
+  const debouncedInput = useDebounce(input, HASH_GENERATOR.DEBOUNCE_DELAY);
   const [hashes, setHashes] = useState({
     md5: "",
     sha256: "",
     sha512: "",
   });
 
-  const generateHashes = (text: string) => {
-    setHashes({
-      md5: CryptoJS.MD5(text).toString(),
-      sha256: CryptoJS.SHA256(text).toString(),
-      sha512: CryptoJS.SHA512(text).toString(),
-    });
-  };
+  useEffect(() => {
+    if (debouncedInput) {
+      setHashes({
+        md5: CryptoJS.MD5(debouncedInput).toString(),
+        sha256: CryptoJS.SHA256(debouncedInput).toString(),
+        sha512: CryptoJS.SHA512(debouncedInput).toString(),
+      });
+    } else {
+      setHashes({ md5: "", sha256: "", sha512: "" });
+    }
+  }, [debouncedInput]);
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -34,12 +41,10 @@ export const HashGenerator = () => {
         <div className="flex gap-2">
           <Input
             value={input}
-            onChange={(e) => {
-              setInput(e.target.value);
-              generateHashes(e.target.value);
-            }}
+            onChange={(e) => setInput(e.target.value)}
             placeholder="Enter text to hash"
             className="font-mono flex-1"
+            aria-label="Text input for hash generation"
           />
           <Button
             variant="outline"
