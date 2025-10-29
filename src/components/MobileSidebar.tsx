@@ -25,7 +25,7 @@ export const MobileSidebar = ({ activeTool, onToolChange }: MobileSidebarProps) 
       <SheetContent side="left" className="w-64 p-0">
         <SheetHeader className="p-4 border-b">
           <SheetTitle className="text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-            DevTools Hub
+            Free DevTools
           </SheetTitle>
         </SheetHeader>
         <SidebarContent activeTool={activeTool} onToolChange={onToolChange} />
