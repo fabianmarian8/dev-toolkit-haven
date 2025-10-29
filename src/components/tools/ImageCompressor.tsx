@@ -16,10 +16,15 @@ export const ImageCompressor = () => {
   const [quality, setQuality] = useLocalStorage("imageQuality", 80);
   const [isCompressing, setIsCompressing] = useState(false);
 
-  // Use ref to track if compression is in progress (prevents loop)
+  // Use refs to prevent infinite loops
   const isCompressingRef = useRef(false);
-  // Track last compressed quality to prevent unnecessary recompressions
   const lastQualityRef = useRef<number>(quality);
+  const qualityRef = useRef(quality);
+
+  // Sync quality ref with state
+  useEffect(() => {
+    qualityRef.current = quality;
+  }, [quality]);
 
   useEffect(() => {
     return () => {
@@ -28,20 +33,29 @@ export const ImageCompressor = () => {
     };
   }, [originalUrl, compressedImage]);
 
-  const compressImage = useCallback(async (file: File) => {
+  // Stable function - no dependencies to avoid recreation
+  const compressImage = useCallback(async (file: File, showToast = true) => {
+    // Prevent concurrent compressions
+    if (isCompressingRef.current) {
+      return;
+    }
+
+    isCompressingRef.current = true;
     setIsCompressing(true);
 
     try {
+      const currentQuality = qualityRef.current;
+
       const options = {
-        maxSizeMB: quality / 100,
+        maxSizeMB: currentQuality / 100,
         maxWidthOrHeight: 1920,
         useWebWorker: true,
-        initialQuality: quality / 100,
+        initialQuality: currentQuality / 100,
       };
 
       const compressed = await imageCompression(file, options);
       setCompressedSize(compressed.size);
-      
+
       const compressedUrl = URL.createObjectURL(compressed);
 
       setCompressedImage((oldUrl) => {
@@ -49,8 +63,7 @@ export const ImageCompressor = () => {
         return compressedUrl;
       });
 
-      // Update last quality ref
-      lastQualityRef.current = quality;
+      lastQualityRef.current = currentQuality;
 
       if (showToast) {
         const reduction = Math.round(((file.size - compressed.size) / file.size) * 100);
@@ -62,14 +75,14 @@ export const ImageCompressor = () => {
       isCompressingRef.current = false;
       setIsCompressing(false);
     }
-  }, [quality]);
+  }, []); // Empty deps - stable function!
 
-  // Recompress when quality changes (with debouncing via ref check)
+  // Recompress when quality changes
   useEffect(() => {
-    if (originalImage && !isCompressing) {
-      compressImage(originalImage);
+    if (originalImage && !isCompressingRef.current && lastQualityRef.current !== quality) {
+      compressImage(originalImage, false); // Silent recompression
     }
-  }, [quality, originalImage, compressImage, isCompressing]);
+  }, [quality, originalImage]); // No compressImage here!
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -82,8 +95,8 @@ export const ImageCompressor = () => {
     setOriginalSize(file.size);
     const url = URL.createObjectURL(file);
     setOriginalUrl(url);
-    
-    compressImage(file);
+
+    await compressImage(file, true); // With toast
   };
 
   const downloadCompressed = () => {
