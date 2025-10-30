@@ -14,7 +14,7 @@ export const ImageCompressor = () => {
   const [compressedImage, setCompressedImage] = useState<string>("");
   const [originalSize, setOriginalSize] = useState(0);
   const [compressedSize, setCompressedSize] = useState(0);
-  const [quality, setQuality] = useLocalStorage("imageQuality", IMAGE_COMPRESSOR.DEFAULT_QUALITY);
+  const [quality, setQuality] = useLocalStorage<number>("imageQuality", IMAGE_COMPRESSOR.DEFAULT_QUALITY);
   const [isCompressing, setIsCompressing] = useState(false);
 
   // Use refs to prevent infinite loops
