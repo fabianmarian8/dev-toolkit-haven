@@ -9,7 +9,7 @@ import { QR_CODE } from "@/constants";
 
 export const QRCodeGenerator = () => {
   const [text, setText] = useLocalStorage("qrText", "https://example.com");
-  const [size, setSize] = useLocalStorage("qrSize", QR_CODE.DEFAULT_SIZE);
+  const [size, setSize] = useLocalStorage<number>("qrSize", QR_CODE.DEFAULT_SIZE);
 
   const downloadQR = () => {
     const svg = document.getElementById("qr-code");

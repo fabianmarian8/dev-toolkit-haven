@@ -7,7 +7,7 @@ import { UUID } from "@/constants";
 
 export const UUIDGenerator = () => {
   const [uuids, setUuids] = useState<string[]>([]);
-  const [count, setCount] = useState(UUID.COUNT_DEFAULT);
+  const [count, setCount] = useState<number>(UUID.COUNT_DEFAULT);
 
   const generateUUID = (): string => {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
