@@ -15,6 +15,10 @@ import { URLTool } from "@/components/tools/URLTool";
 import { UUIDGenerator } from "@/components/tools/UUIDGenerator";
 import { TimestampConverter } from "@/components/tools/TimestampConverter";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { SEOHead } from "@/components/SEOHead";
+import { SEOContent } from "@/components/SEOContent";
+import { toolsSEO } from "@/config/seo";
+import { toolsContent } from "@/config/seoContent";
 
 const toolsMap: Record<string, { component: () => React.ReactNode; title: string; description: string }> = {
   "/json": {
@@ -105,9 +109,13 @@ const Index = () => {
   };
 
   const currentTool = toolsMap[location.pathname] || toolsMap["/json"];
+  const toolId = activeTool || "json";
+  const seoConfig = toolsSEO[toolId];
+  const seoContent = toolsContent[toolId];
 
   return (
     <div className="flex h-screen overflow-hidden w-full">
+      <SEOHead config={seoConfig} />
       <Sidebar activeTool={activeTool} onToolChange={handleToolChange} />
       <main className="flex-1 overflow-y-auto">
         <div className="md:hidden p-4 border-b flex items-center gap-3">
@@ -118,12 +126,22 @@ const Index = () => {
         </div>
         <div className="container max-w-4xl py-8 px-4">
           <div className="mb-6">
-            <h2 className="text-3xl font-bold mb-2">{currentTool.title}</h2>
+            <h1 className="text-3xl font-bold mb-2">{currentTool.title}</h1>
             <p className="text-muted-foreground">{currentTool.description}</p>
           </div>
           <div className="bg-gradient-card rounded-xl shadow-glow p-6 border">
             {currentTool.component()}
           </div>
+
+          {/* SEO Content Section */}
+          {seoContent && (
+            <SEOContent
+              title={seoContent.title}
+              description={seoContent.description}
+              howToUse={seoContent.howToUse}
+              whyUse={seoContent.whyUse}
+            />
+          )}
         </div>
       </main>
     </div>
