@@ -15,7 +15,7 @@ User-agent: *
 Allow: /
 
 # Sitemaps
-Sitemap: https://lovable.dev/projects/32d007df-3d70-4748-b825-7e9c439b6ca2/sitemap.xml
+Sitemap: https://free-devtools.com/sitemap.xml
 
 # Crawl-delay (optional, be nice to bots)
 Crawl-delay: 1
