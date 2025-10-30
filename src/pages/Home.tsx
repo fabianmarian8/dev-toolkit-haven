@@ -13,7 +13,8 @@ import {
   Key,
   Clock,
   ArrowRight,
-  Sparkles
+  Sparkles,
+  BookOpen
 } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -134,7 +135,18 @@ const Home = () => {
               Free DevTools
             </h1>
           </div>
-          <ThemeToggle />
+          <div className="flex items-center gap-4">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => navigate("/blog")}
+              className="gap-2"
+            >
+              <BookOpen className="h-4 w-4" />
+              Blog
+            </Button>
+            <ThemeToggle />
+          </div>
         </div>
       </header>
 

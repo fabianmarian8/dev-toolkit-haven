@@ -1,4 +1,4 @@
-import { Code2, FileJson, FileText, Image, Hash, QrCode, GitCompare, Link2, Regex, Palette, KeyRound, Clock, Home } from "lucide-react";
+import { Code2, FileJson, FileText, Image, Hash, QrCode, GitCompare, Link2, Regex, Palette, KeyRound, Clock, Home, BookOpen } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "./ThemeToggle";
@@ -26,6 +26,7 @@ const tools = [
 export const SidebarContent = ({ activeTool, onToolChange }: SidebarContentProps) => {
   const location = useLocation();
   const isHomePage = location.pathname === "/";
+  const isBlogPage = location.pathname.startsWith("/blog");
 
   return (
     <div className="flex flex-col h-full">
@@ -41,6 +42,18 @@ export const SidebarContent = ({ activeTool, onToolChange }: SidebarContentProps
         >
           <Home className="h-5 w-5" />
           <span>Home</span>
+        </Link>
+        <Link
+          to="/blog"
+          className={cn(
+            "flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all mb-2",
+            isBlogPage
+              ? "bg-primary text-primary-foreground shadow-glow"
+              : "text-foreground hover:bg-muted"
+          )}
+        >
+          <BookOpen className="h-5 w-5" />
+          <span>Blog</span>
         </Link>
         <div className="border-t mb-2" />
         {tools.map((tool) => {

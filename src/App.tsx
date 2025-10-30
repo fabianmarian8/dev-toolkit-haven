@@ -7,6 +7,10 @@ import { ThemeProvider } from "next-themes";
 import Home from "./pages/Home";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
+import Blog from "./pages/Blog";
+import BlogArticleJsonFormatters from "./pages/BlogArticleJsonFormatters";
+import BlogArticleImageCompression from "./pages/BlogArticleImageCompression";
+import BlogArticleDeveloperTools2025 from "./pages/BlogArticleDeveloperTools2025";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +35,10 @@ const App = () => (
             <Route path="/url" element={<Index />} />
             <Route path="/uuid" element={<Index />} />
             <Route path="/timestamp" element={<Index />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/top-10-free-json-formatters" element={<BlogArticleJsonFormatters />} />
+            <Route path="/blog/how-to-compress-images-online-free" element={<BlogArticleImageCompression />} />
+            <Route path="/blog/best-free-developer-tools-2025" element={<BlogArticleDeveloperTools2025 />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
