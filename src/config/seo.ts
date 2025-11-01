@@ -4,8 +4,6 @@ export interface SEOConfig {
   keywords: string[];
   ogTitle: string;
   ogDescription: string;
-  canonical?: string;
-  ogImage?: string;
   structuredData?: {
     "@context": string;
     "@type": string;
