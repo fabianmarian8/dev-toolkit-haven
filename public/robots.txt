@@ -1,9 +1,25 @@
 # robots.txt for Free DevTools
+# All free developer tools are open for indexing
+
 User-agent: Googlebot
 Allow: /
+Crawl-delay: 0
 
 User-agent: Bingbot
 Allow: /
+Crawl-delay: 1
+
+User-agent: Yandexbot
+Allow: /
+Crawl-delay: 1
+
+User-agent: DuckDuckBot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Baiduspider
+Allow: /
+Crawl-delay: 1
 
 User-agent: Twitterbot
 Allow: /
@@ -13,9 +29,7 @@ Allow: /
 
 User-agent: *
 Allow: /
+Crawl-delay: 1
 
 # Sitemaps
-Sitemap: https://lovable.dev/projects/32d007df-3d70-4748-b825-7e9c439b6ca2/sitemap.xml
-
-# Crawl-delay (optional, be nice to bots)
-Crawl-delay: 1
+Sitemap: /sitemap.xml
