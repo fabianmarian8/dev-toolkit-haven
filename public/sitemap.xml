@@ -4,7 +4,7 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <!-- Home Page - Free Developer Tools -->
   <url>
-    <loc>https://free-devtools.com/</loc>
+    <loc>https://free-devtool.com/</loc>
     <lastmod>2025-10-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
@@ -12,7 +12,7 @@
 
   <!-- Free JSON Formatter Tool -->
   <url>
-    <loc>https://free-devtools.com/json</loc>
+    <loc>https://free-devtool.com/json</loc>
     <lastmod>2025-10-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.95</priority>
@@ -20,7 +20,7 @@
 
   <!-- Free Base64 Encoder Decoder Tool -->
   <url>
-    <loc>https://free-devtools.com/base64</loc>
+    <loc>https://free-devtool.com/base64</loc>
     <lastmod>2025-10-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.95</priority>
@@ -28,7 +28,7 @@
 
   <!-- Free Image Compressor Tool -->
   <url>
-    <loc>https://free-devtools.com/image</loc>
+    <loc>https://free-devtool.com/image</loc>
     <lastmod>2025-10-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.95</priority>
@@ -36,7 +36,7 @@
 
   <!-- Free Color Picker Tool -->
   <url>
-    <loc>https://free-devtools.com/color</loc>
+    <loc>https://free-devtool.com/color</loc>
     <lastmod>2025-10-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.90</priority>
@@ -44,7 +44,7 @@
 
   <!-- Free Regex Tester Tool -->
   <url>
-    <loc>https://free-devtools.com/regex</loc>
+    <loc>https://free-devtool.com/regex</loc>
     <lastmod>2025-10-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.90</priority>
@@ -52,7 +52,7 @@
 
   <!-- Free Markdown Editor Tool -->
   <url>
-    <loc>https://free-devtools.com/markdown</loc>
+    <loc>https://free-devtool.com/markdown</loc>
     <lastmod>2025-10-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.90</priority>
@@ -60,7 +60,7 @@
 
   <!-- Free Hash Generator Tool -->
   <url>
-    <loc>https://free-devtools.com/hash</loc>
+    <loc>https://free-devtool.com/hash</loc>
     <lastmod>2025-10-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.90</priority>
@@ -68,7 +68,7 @@
 
   <!-- Free QR Code Generator Tool -->
   <url>
-    <loc>https://free-devtools.com/qr</loc>
+    <loc>https://free-devtool.com/qr</loc>
     <lastmod>2025-10-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.90</priority>
@@ -76,7 +76,7 @@
 
   <!-- Free Text Diff Checker Tool -->
   <url>
-    <loc>https://free-devtools.com/diff</loc>
+    <loc>https://free-devtool.com/diff</loc>
     <lastmod>2025-10-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
@@ -84,7 +84,7 @@
 
   <!-- Free URL Encoder Decoder Tool -->
   <url>
-    <loc>https://free-devtools.com/url</loc>
+    <loc>https://free-devtool.com/url</loc>
     <lastmod>2025-10-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
@@ -92,7 +92,7 @@
 
   <!-- Free UUID Generator Tool -->
   <url>
-    <loc>https://free-devtools.com/uuid</loc>
+    <loc>https://free-devtool.com/uuid</loc>
     <lastmod>2025-10-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
@@ -100,7 +100,7 @@
 
   <!-- Free Timestamp Converter Tool -->
   <url>
-    <loc>https://free-devtools.com/timestamp</loc>
+    <loc>https://free-devtool.com/timestamp</loc>
     <lastmod>2025-10-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
