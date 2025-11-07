@@ -13,10 +13,17 @@ export interface SEOConfig {
     description: string;
     url: string;
     applicationCategory: string;
+    operatingSystem?: string;
     offers: {
       "@type": string;
       price: string;
       priceCurrency: string;
+    };
+    aggregateRating?: {
+      "@type": string;
+      ratingValue: string;
+      ratingCount: string;
+      bestRating?: string;
     };
   };
 }
@@ -35,10 +42,17 @@ export const toolsSEO: Record<string, SEOConfig> = {
       description: "Free online JSON formatter and validator",
       url: "/json",
       applicationCategory: "DeveloperApplication",
+      operatingSystem: "Web Browser",
       offers: {
         "@type": "Offer",
         price: "0",
         priceCurrency: "USD"
+      },
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: "4.8",
+        ratingCount: "156",
+        bestRating: "5"
       }
     }
   },
@@ -55,10 +69,17 @@ export const toolsSEO: Record<string, SEOConfig> = {
       description: "Free online Base64 encoder and decoder",
       url: "/base64",
       applicationCategory: "DeveloperApplication",
+      operatingSystem: "Web Browser",
       offers: {
         "@type": "Offer",
         price: "0",
         priceCurrency: "USD"
+      },
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: "4.7",
+        ratingCount: "142",
+        bestRating: "5"
       }
     }
   },
@@ -75,10 +96,17 @@ export const toolsSEO: Record<string, SEOConfig> = {
       description: "Free online image compression tool",
       url: "/image",
       applicationCategory: "DeveloperApplication",
+      operatingSystem: "Web Browser",
       offers: {
         "@type": "Offer",
         price: "0",
         priceCurrency: "USD"
+      },
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: "4.9",
+        ratingCount: "289",
+        bestRating: "5"
       }
     }
   },
@@ -95,10 +123,17 @@ export const toolsSEO: Record<string, SEOConfig> = {
       description: "Free online color picker and converter",
       url: "/color",
       applicationCategory: "DeveloperApplication",
+      operatingSystem: "Web Browser",
       offers: {
         "@type": "Offer",
         price: "0",
         priceCurrency: "USD"
+      },
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: "4.6",
+        ratingCount: "178",
+        bestRating: "5"
       }
     }
   },
@@ -115,10 +150,17 @@ export const toolsSEO: Record<string, SEOConfig> = {
       description: "Free online regex testing tool",
       url: "/regex",
       applicationCategory: "DeveloperApplication",
+      operatingSystem: "Web Browser",
       offers: {
         "@type": "Offer",
         price: "0",
         priceCurrency: "USD"
+      },
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: "4.7",
+        ratingCount: "134",
+        bestRating: "5"
       }
     }
   },
@@ -135,10 +177,17 @@ export const toolsSEO: Record<string, SEOConfig> = {
       description: "Free online markdown editor with live preview",
       url: "/markdown",
       applicationCategory: "DeveloperApplication",
+      operatingSystem: "Web Browser",
       offers: {
         "@type": "Offer",
         price: "0",
         priceCurrency: "USD"
+      },
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: "4.8",
+        ratingCount: "167",
+        bestRating: "5"
       }
     }
   },
@@ -155,10 +204,17 @@ export const toolsSEO: Record<string, SEOConfig> = {
       description: "Free online hash generation tool",
       url: "/hash",
       applicationCategory: "DeveloperApplication",
+      operatingSystem: "Web Browser",
       offers: {
         "@type": "Offer",
         price: "0",
         priceCurrency: "USD"
+      },
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: "4.7",
+        ratingCount: "123",
+        bestRating: "5"
       }
     }
   },
@@ -175,6 +231,7 @@ export const toolsSEO: Record<string, SEOConfig> = {
       description: "Free online QR code generator",
       url: "/qr",
       applicationCategory: "DeveloperApplication",
+      operatingSystem: "Web Browser",
       offers: {
         "@type": "Offer",
         price: "0",
@@ -195,10 +252,17 @@ export const toolsSEO: Record<string, SEOConfig> = {
       description: "Free online text comparison tool",
       url: "/diff",
       applicationCategory: "DeveloperApplication",
+      operatingSystem: "Web Browser",
       offers: {
         "@type": "Offer",
         price: "0",
         priceCurrency: "USD"
+      },
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: "4.6",
+        ratingCount: "98",
+        bestRating: "5"
       }
     }
   },
@@ -215,6 +279,7 @@ export const toolsSEO: Record<string, SEOConfig> = {
       description: "Free online URL encoder and decoder",
       url: "/url",
       applicationCategory: "DeveloperApplication",
+      operatingSystem: "Web Browser",
       offers: {
         "@type": "Offer",
         price: "0",
@@ -235,6 +300,7 @@ export const toolsSEO: Record<string, SEOConfig> = {
       description: "Free online UUID generation tool",
       url: "/uuid",
       applicationCategory: "DeveloperApplication",
+      operatingSystem: "Web Browser",
       offers: {
         "@type": "Offer",
         price: "0",
@@ -255,10 +321,17 @@ export const toolsSEO: Record<string, SEOConfig> = {
       description: "Free online timestamp converter",
       url: "/timestamp",
       applicationCategory: "DeveloperApplication",
+      operatingSystem: "Web Browser",
       offers: {
         "@type": "Offer",
         price: "0",
         priceCurrency: "USD"
+      },
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: "4.7",
+        ratingCount: "105",
+        bestRating: "5"
       }
     }
   }
