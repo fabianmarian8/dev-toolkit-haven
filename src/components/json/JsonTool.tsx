@@ -1,8 +1,8 @@
 // dev-toolkit-haven/src/components/json/JsonTool.tsx
 
 import React, { useState } from 'react';
-import JsonDiffTool from './JsonDiffTool'; // Predpokladáme, že tento súbor vytvoríte
-import JsonToTsTool from './JsonToTsTool'; // Predpokladáme, že tento súbor vytvoríte
+import JsonDiffTool from './JsonDiffTool';
+import JsonToTsTool from './JsonToTsTool';
 
 // Simulácia hlavného JSON Formattera
 const JsonFormatter = () => {
@@ -40,14 +40,12 @@ const JsonFormatter = () => {
 
             {/* Killer Feature 1: JSON Diff - V reálnom kóde by ste tu importovali a použili JsonDiffTool */}
             <div className="border p-4 rounded-lg shadow-md dark:bg-gray-700">
-                {/* <JsonDiffTool /> */}
-                <p className="text-center text-red-500">**POZNÁMKA:** Pre plnú funkčnosť JSON Diff vložte kód z \`src/utils/jsonDiff.ts\` do nového súboru \`src/components/json/JsonDiffTool.tsx\` a odkomentujte riadok vyššie.</p>
+    <JsonDiffTool />
             </div>
 
             {/* Killer Feature 2: JSON to TS - V reálnom kóde by ste tu importovali a použili JsonToTsTool */}
             <div className="border p-4 rounded-lg shadow-md dark:bg-gray-700">
-                {/* <JsonToTsTool /> */}
-                <p className="text-center text-red-500">**POZNÁMKA:** Pre plnú funkčnosť JSON to TS vložte kód z \`src/utils/jsonToTs.ts\` do nového súboru \`src/components/json/JsonToTsTool.tsx\` a odkomentujte riadok vyššie.</p>
+    <JsonToTsTool />
             </div>
 
             {/* SEO Content */}
