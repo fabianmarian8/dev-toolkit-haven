@@ -20,7 +20,7 @@ export function jsonToTsInterface(jsonString: string): string {
 }
 
 // Simulácia komponentu pre JSON to TS
-export const JsonToTsComponentCode = \`
+export const JsonToTsComponentCode = `
 import React, { useState, useCallback } from 'react';
 import { jsonToTsInterface } from '../utils/jsonToTs';
 
@@ -63,4 +63,4 @@ const JsonToTsTool = () => {
 };
 
 export default JsonToTsTool;
-\`;
+`;

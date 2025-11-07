@@ -23,7 +23,7 @@ export function useDarkMode() {
 }
 
 // Simulácia komponentu pre prepínanie Dark Mode
-export const DarkModeToggleComponentCode = \`
+export const DarkModeToggleComponentCode = `
 import React from 'react';
 import { useDarkMode } from '../utils/darkMode';
 
@@ -42,4 +42,4 @@ const DarkModeToggle = () => {
 };
 
 export default DarkModeToggle;
-\`;
+`;

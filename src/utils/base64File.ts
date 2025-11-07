@@ -34,7 +34,7 @@ export function base64ToFileDownload(base64String: string, filename: string) {
 }
 
 // Simulácia komponentu pre Base64 File konverziu
-export const Base64FileComponentCode = \`
+export const Base64FileComponentCode = `
 import React, { useState, useCallback } from 'react';
 import { fileToBase64, base64ToFileDownload } from '../utils/base64File';
 
@@ -60,7 +60,7 @@ const Base64FileTool = () => {
       // Získanie MIME typu a názvu súboru pre stiahnutie
       const mimeTypeMatch = base64Output.match(/^data:(.*?);/);
       const mimeType = mimeTypeMatch ? mimeTypeMatch[1] : 'application/octet-stream';
-      const filename = \`download.\${mimeType.split('/')[1] || 'bin'}\`;
+      const filename = \`download.\${mimeType.split('/')[1] || 'bin'}`;
       
       base64ToFileDownload(base64Output, filename);
     }
@@ -87,4 +87,4 @@ const Base64FileTool = () => {
 };
 
 export default Base64FileTool;
-\`;
+`;

@@ -37,7 +37,7 @@ export function getJsonDiff(jsonA: string, jsonB: string): { diff: Delta | undef
 }
 
 // Simulácia komponentu pre JSON Diff (pretože nemôžem spustiť React)
-export const JsonDiffComponentCode = \`
+export const JsonDiffComponentCode = `
 import React, { useState, useCallback } from 'react';
 import { getJsonDiff } from '../utils/jsonDiff';
 // V reálnom kóde by ste potrebovali aj vizualizátor, napr. 'jsondiffpatch-html'
@@ -108,4 +108,4 @@ const JsonDiffTool = () => {
 };
 
 export default JsonDiffTool;
-\`;
+`;
