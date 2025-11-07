@@ -13,13 +13,18 @@ import {
   Key,
   Clock,
   ArrowRight,
-  Sparkles
+  Sparkles,
+  Share2
 } from "lucide-react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { SEOHead } from "@/components/SEOHead";
 import { homeSEO } from "@/config/seo";
+import { AnimatedBackground } from "@/components/AnimatedBackground";
+import { GlassmorphismCard } from "@/components/GlassmorphismCard";
+import { UsageCounter } from "@/components/UsageCounter";
+import { FeaturedBadges } from "@/components/FeaturedBadges";
 
 const tools = [
   {
@@ -29,6 +34,7 @@ const tools = [
     icon: FileJson,
     color: "text-blue-500",
     bgColor: "bg-blue-500/10 hover:bg-blue-500/20",
+    gradient: "from-blue-500/10 to-blue-600/5 dark:from-blue-500/20 dark:to-blue-600/10",
   },
   {
     id: "base64",
@@ -37,6 +43,7 @@ const tools = [
     icon: FileText,
     color: "text-green-500",
     bgColor: "bg-green-500/10 hover:bg-green-500/20",
+    gradient: "from-green-500/10 to-green-600/5 dark:from-green-500/20 dark:to-green-600/10",
   },
   {
     id: "image",
@@ -45,6 +52,7 @@ const tools = [
     icon: Image,
     color: "text-purple-500",
     bgColor: "bg-purple-500/10 hover:bg-purple-500/20",
+    gradient: "from-purple-500/10 to-purple-600/5 dark:from-purple-500/20 dark:to-purple-600/10",
   },
   {
     id: "color",
@@ -53,6 +61,7 @@ const tools = [
     icon: Palette,
     color: "text-pink-500",
     bgColor: "bg-pink-500/10 hover:bg-pink-500/20",
+    gradient: "from-pink-500/10 to-pink-600/5 dark:from-pink-500/20 dark:to-pink-600/10",
   },
   {
     id: "regex",
@@ -61,6 +70,7 @@ const tools = [
     icon: Regex,
     color: "text-orange-500",
     bgColor: "bg-orange-500/10 hover:bg-orange-500/20",
+    gradient: "from-orange-500/10 to-orange-600/5 dark:from-orange-500/20 dark:to-orange-600/10",
   },
   {
     id: "markdown",
@@ -69,6 +79,7 @@ const tools = [
     icon: FileCode2,
     color: "text-indigo-500",
     bgColor: "bg-indigo-500/10 hover:bg-indigo-500/20",
+    gradient: "from-indigo-500/10 to-indigo-600/5 dark:from-indigo-500/20 dark:to-indigo-600/10",
   },
   {
     id: "hash",
@@ -77,6 +88,7 @@ const tools = [
     icon: Hash,
     color: "text-red-500",
     bgColor: "bg-red-500/10 hover:bg-red-500/20",
+    gradient: "from-red-500/10 to-red-600/5 dark:from-red-500/20 dark:to-red-600/10",
   },
   {
     id: "qr",
@@ -85,6 +97,7 @@ const tools = [
     icon: QrCode,
     color: "text-teal-500",
     bgColor: "bg-teal-500/10 hover:bg-teal-500/20",
+    gradient: "from-teal-500/10 to-teal-600/5 dark:from-teal-500/20 dark:to-teal-600/10",
   },
   {
     id: "diff",
@@ -93,6 +106,7 @@ const tools = [
     icon: FileSpreadsheet,
     color: "text-yellow-500",
     bgColor: "bg-yellow-500/10 hover:bg-yellow-500/20",
+    gradient: "from-yellow-500/10 to-yellow-600/5 dark:from-yellow-500/20 dark:to-yellow-600/10",
   },
   {
     id: "url",
@@ -101,6 +115,7 @@ const tools = [
     icon: Link,
     color: "text-cyan-500",
     bgColor: "bg-cyan-500/10 hover:bg-cyan-500/20",
+    gradient: "from-cyan-500/10 to-cyan-600/5 dark:from-cyan-500/20 dark:to-cyan-600/10",
   },
   {
     id: "uuid",
@@ -109,6 +124,7 @@ const tools = [
     icon: Key,
     color: "text-violet-500",
     bgColor: "bg-violet-500/10 hover:bg-violet-500/20",
+    gradient: "from-violet-500/10 to-violet-600/5 dark:from-violet-500/20 dark:to-violet-600/10",
   },
   {
     id: "timestamp",
@@ -117,6 +133,7 @@ const tools = [
     icon: Clock,
     color: "text-emerald-500",
     bgColor: "bg-emerald-500/10 hover:bg-emerald-500/20",
+    gradient: "from-emerald-500/10 to-emerald-600/5 dark:from-emerald-500/20 dark:to-emerald-600/10",
   },
 ];
 
@@ -126,8 +143,9 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-background">
       <SEOHead config={homeSEO} />
+      
       {/* Header with Theme Toggle */}
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-lg supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <h1 className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
@@ -138,28 +156,44 @@ const Home = () => {
         </div>
       </header>
 
-      {/* Hero Section */}
+      {/* Hero Section with Animated Background */}
       <div className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5" />
-        <div className="container relative mx-auto px-4 py-16 md:py-24">
-          <div className="flex flex-col items-center text-center space-y-6 max-w-4xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full text-sm font-medium text-primary">
-              <Sparkles className="h-4 w-4" />
-              100% Free Forever
+        <AnimatedBackground />
+        
+        <div className="container relative mx-auto px-4 py-20 md:py-32">
+          <div className="flex flex-col items-center text-center space-y-8 max-w-4xl mx-auto">
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-full text-sm font-medium border border-white/20 dark:border-gray-700/50 shadow-lg">
+              <Sparkles className="h-4 w-4 text-primary" />
+              <span className="bg-gradient-primary bg-clip-text text-transparent font-semibold">
+                100% Free Forever
+              </span>
             </div>
 
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold bg-gradient-primary bg-clip-text text-transparent leading-tight">
-              Free Developer Tools
+            {/* Main Heading */}
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold leading-tight">
+              <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 dark:from-blue-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
+                Free Developer
+              </span>
+              <br />
+              <span className="bg-gradient-to-r from-pink-600 via-purple-600 to-blue-600 dark:from-pink-400 dark:via-purple-400 dark:to-blue-400 bg-clip-text text-transparent">
+                Tools
+              </span>
             </h1>
 
-            <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl">
+            {/* Subtitle */}
+            <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl leading-relaxed">
               Professional online utilities for developers. No registration, no limits, completely free.
             </p>
 
+            {/* Usage Counter */}
+            <UsageCounter />
+
+            {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 mt-8">
               <Button
                 size="lg"
-                className="text-lg px-8"
+                className="text-lg px-8 py-6 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
                 onClick={() => navigate("/json")}
               >
                 Get Started
@@ -168,20 +202,23 @@ const Home = () => {
               <Button
                 size="lg"
                 variant="outline"
-                className="text-lg px-8"
+                className="text-lg px-8 py-6 backdrop-blur-sm bg-white/50 dark:bg-gray-800/50 border-white/20 dark:border-gray-700/50 hover:bg-white/80 dark:hover:bg-gray-800/80 transition-all duration-300"
                 onClick={() => document.getElementById('tools')?.scrollIntoView({ behavior: 'smooth' })}
               >
                 View All Tools
               </Button>
             </div>
+
+            {/* Featured Badges */}
+            <FeaturedBadges />
           </div>
         </div>
       </div>
 
       {/* Tools Grid Section */}
-      <div id="tools" className="container mx-auto px-4 py-16">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+      <div id="tools" className="container mx-auto px-4 py-20">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl md:text-5xl font-bold mb-4">
             Choose Your Tool
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -193,14 +230,15 @@ const Home = () => {
           {tools.map((tool) => {
             const Icon = tool.icon;
             return (
-              <Card
+              <GlassmorphismCard
                 key={tool.id}
-                className="group cursor-pointer transition-all duration-300 hover:shadow-xl hover:scale-[1.02] border-2 hover:border-primary/50"
+                gradient={tool.gradient}
                 onClick={() => navigate(`/${tool.id}`)}
+                className="h-full"
               >
                 <CardHeader>
-                  <div className={`w-14 h-14 rounded-lg ${tool.bgColor} flex items-center justify-center mb-4 transition-colors duration-300`}>
-                    <Icon className={`h-7 w-7 ${tool.color}`} />
+                  <div className={`w-16 h-16 rounded-xl ${tool.bgColor} flex items-center justify-center mb-4 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3`}>
+                    <Icon className={`h-8 w-8 ${tool.color}`} />
                   </div>
                   <CardTitle className="text-xl group-hover:text-primary transition-colors">
                     {tool.title}
@@ -210,49 +248,81 @@ const Home = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Button variant="ghost" className="w-full group-hover:bg-primary/10">
+                  <Button 
+                    variant="ghost" 
+                    className="w-full group-hover:bg-primary/10 transition-all duration-300"
+                  >
                     Open Tool
                     <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                   </Button>
                 </CardContent>
-              </Card>
+              </GlassmorphismCard>
             );
           })}
         </div>
       </div>
 
       {/* Features Section */}
-      <div className="bg-muted/50 py-16">
+      <div className="relative overflow-hidden bg-gradient-to-b from-background via-muted/30 to-background py-20">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            <div className="text-center space-y-3">
-              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto">
-                <Sparkles className="h-6 w-6 text-primary" />
+          <div className="grid md:grid-cols-3 gap-12 max-w-6xl mx-auto">
+            <div className="text-center space-y-4 group">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center mx-auto group-hover:scale-110 transition-transform duration-300">
+                <Sparkles className="h-8 w-8 text-primary" />
               </div>
-              <h3 className="text-xl font-semibold">100% Free</h3>
-              <p className="text-muted-foreground">
+              <h3 className="text-2xl font-semibold">100% Free</h3>
+              <p className="text-muted-foreground leading-relaxed">
                 All tools are completely free with no hidden costs or premium features
               </p>
             </div>
-            <div className="text-center space-y-3">
-              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto">
-                <Key className="h-6 w-6 text-primary" />
+            
+            <div className="text-center space-y-4 group">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center mx-auto group-hover:scale-110 transition-transform duration-300">
+                <Key className="h-8 w-8 text-primary" />
               </div>
-              <h3 className="text-xl font-semibold">No Registration</h3>
-              <p className="text-muted-foreground">
+              <h3 className="text-2xl font-semibold">No Registration</h3>
+              <p className="text-muted-foreground leading-relaxed">
                 Use all tools instantly without creating an account or signing up
               </p>
             </div>
-            <div className="text-center space-y-3">
-              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto">
-                <FileCode2 className="h-6 w-6 text-primary" />
+            
+            <div className="text-center space-y-4 group">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-pink-500/20 to-orange-500/20 flex items-center justify-center mx-auto group-hover:scale-110 transition-transform duration-300">
+                <FileCode2 className="h-8 w-8 text-primary" />
               </div>
-              <h3 className="text-xl font-semibold">Privacy First</h3>
-              <p className="text-muted-foreground">
+              <h3 className="text-2xl font-semibold">Privacy First</h3>
+              <p className="text-muted-foreground leading-relaxed">
                 All processing happens in your browser. Your data never leaves your device
               </p>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Share Section */}
+      <div className="container mx-auto px-4 py-16">
+        <div className="max-w-3xl mx-auto text-center space-y-6">
+          <h3 className="text-3xl font-bold">Love Free DevTools?</h3>
+          <p className="text-lg text-muted-foreground">
+            Help other developers discover these free tools by sharing with your network
+          </p>
+          <Button
+            size="lg"
+            variant="outline"
+            className="gap-2"
+            onClick={() => {
+              if (navigator.share) {
+                navigator.share({
+                  title: 'Free DevTools',
+                  text: 'Check out these free developer tools!',
+                  url: window.location.href
+                });
+              }
+            }}
+          >
+            <Share2 className="h-5 w-5" />
+            Share Free DevTools
+          </Button>
         </div>
       </div>
     </div>
