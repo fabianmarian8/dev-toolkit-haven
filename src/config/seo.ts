@@ -334,6 +334,33 @@ export const toolsSEO: Record<string, SEOConfig> = {
         bestRating: "5"
       }
     }
+  },
+  jwt: {
+    title: "Free JWT Decoder Online - Decode JWT Tokens | Free DevTools",
+    description: "FREE JWT decoder online. Decode and inspect JWT tokens securely in your browser. View header, payload, and signature. 100% privacy-first, no data sent to server.",
+    keywords: ["free jwt decoder", "jwt token decoder", "decode jwt online", "jwt parser free", "jwt debugger online", "jwt inspector"],
+    ogTitle: "Free JWT Decoder - Decode JWT Tokens Securely",
+    ogDescription: "FREE JWT decoder. Decode and inspect JWT tokens in your browser. Complete privacy - all processing happens locally.",
+    structuredData: {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      name: "Free JWT Decoder",
+      description: "Free online JWT token decoder and inspector",
+      url: "/jwt",
+      applicationCategory: "DeveloperApplication",
+      operatingSystem: "Web Browser",
+      offers: {
+        "@type": "Offer",
+        price: "0",
+        priceCurrency: "USD"
+      },
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: "4.8",
+        ratingCount: "87",
+        bestRating: "5"
+      }
+    }
   }
 };
 

@@ -209,5 +209,24 @@ export const toolsContent: Record<string, ToolSEOContent> = {
       "Instant conversion",
       "Perfect for API development"
     ]
+  },
+  jwt: {
+    title: "Free JWT Decoder",
+    description: "Decode and inspect JWT (JSON Web Token) tokens securely in your browser. View header, payload, signature, and token information including expiration dates, issuer, and claims. All processing happens locally for complete privacy.",
+    howToUse: [
+      "Paste your JWT token into the input field",
+      "Click 'Decode JWT' button",
+      "View decoded header and payload",
+      "Check token expiration and validity",
+      "Copy decoded parts with one click"
+    ],
+    whyUse: [
+      "100% privacy - all processing in browser",
+      "Free JWT decoding tool",
+      "View token expiration and claims",
+      "Inspect header, payload, and signature",
+      "Perfect for debugging authentication",
+      "No data sent to any server"
+    ]
   }
 };
