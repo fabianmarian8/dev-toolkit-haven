@@ -51,6 +51,8 @@
     "diff": "^8.0.2",
     "embla-carousel-react": "^8.6.0",
     "input-otp": "^1.4.2",
+    "json-to-ts": "^2.1.0",
+    "jsondiffpatch": "^0.7.3",
     "lucide-react": "^0.462.0",
     "next-themes": "^0.3.0",
     "qrcode.react": "^4.2.0",
