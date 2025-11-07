@@ -105,4 +105,12 @@
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
+
+  <!-- Free JWT Decoder Tool -->
+  <url>
+    <loc>https://free-devtool.com/jwt</loc>
+    <lastmod>2025-11-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.95</priority>
+  </url>
 </urlset>

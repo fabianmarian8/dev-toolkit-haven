@@ -14,7 +14,8 @@ import {
   Clock,
   ArrowRight,
   Sparkles,
-  Share2
+  Share2,
+  Shield
 } from "lucide-react";
 import { CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -134,6 +135,15 @@ const tools = [
     color: "text-emerald-500",
     bgColor: "bg-emerald-500/10 hover:bg-emerald-500/20",
     gradient: "from-emerald-500/10 to-emerald-600/5 dark:from-emerald-500/20 dark:to-emerald-600/10",
+  },
+  {
+    id: "jwt",
+    title: "JWT Decoder",
+    description: "Decode and inspect JWT tokens securely",
+    icon: Shield,
+    color: "text-blue-600",
+    bgColor: "bg-blue-600/10 hover:bg-blue-600/20",
+    gradient: "from-blue-600/10 to-indigo-600/5 dark:from-blue-600/20 dark:to-indigo-600/10",
   },
 ];
 
