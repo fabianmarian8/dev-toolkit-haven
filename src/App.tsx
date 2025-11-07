@@ -31,6 +31,7 @@ const App = () => (
             <Route path="/url" element={<Index />} />
             <Route path="/uuid" element={<Index />} />
             <Route path="/timestamp" element={<Index />} />
+            <Route path="/jwt" element={<Index />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

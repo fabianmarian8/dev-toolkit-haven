@@ -1,4 +1,4 @@
-import { Code2, FileJson, FileText, Image, Hash, QrCode, GitCompare, Link2, Regex, Palette, KeyRound, Clock, Home } from "lucide-react";
+import { Code2, FileJson, FileText, Image, Hash, QrCode, GitCompare, Link2, Regex, Palette, KeyRound, Clock, Home, Shield } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "./ThemeToggle";
@@ -21,6 +21,7 @@ const tools = [
   { id: "url", label: "URL Encode/Decode", icon: Link2, path: "/url" },
   { id: "uuid", label: "UUID Generator", icon: KeyRound, path: "/uuid" },
   { id: "timestamp", label: "Timestamp Converter", icon: Clock, path: "/timestamp" },
+  { id: "jwt", label: "JWT Decoder", icon: Shield, path: "/jwt" },
 ];
 
 export const SidebarContent = ({ activeTool, onToolChange }: SidebarContentProps) => {
